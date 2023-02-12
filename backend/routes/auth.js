@@ -21,7 +21,9 @@ router.post('/', [
         email: req.body.email,
         password: req.body.password,
       }).then(user => res.json(user))
-      .catch(err => console.log(err))
+      .catch(err => {console.log(err)
+      res.json({err: "Please Enter a Unique Value for Email", messsage: err.message})
+      })
 })
 
 module.exports = router
