@@ -17,7 +17,8 @@ router.post('/createuser', [
       return res.status(400).json({ errors: errors.array() });
     }
     // Check if User with same email already exists 
-    let user = User.findOne({email: req.body.email});
+    let user = await User.findOne({email: req.body.email});
+    console.log("nice")
     if (user){
       return res.status(400).json({error: "sorry, email is registered already"})
     }
@@ -26,6 +27,7 @@ router.post('/createuser', [
         email: req.body.email,
         password: req.body.password,
       })
+      res.json({user})
       // .then(user => res.json(user))
       // .catch(err => {console.log(err)
       // res.json({err: "Please Enter a Unique Value for Email", messsage: err.message})
