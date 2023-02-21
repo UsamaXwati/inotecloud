@@ -3,11 +3,11 @@ const User = require('../models/User')
 const router = express.Router();
 const { body, validationResult } = require('express-validator');
 var bcrypt = require('bcryptjs');
+var jwt = require('jsonwebtoken');
 
+const JWT_SECRET = 'Blackb33-1337';
 
 // Create a User using POST "/api/auth/createuser ". Doesn't require Auth
-
-
 router.post('/createuser', [
     body('name', 'Name Should be atleast Three Characters').isLength({ min: 3 }),
     body('email', 'Enter a Valid Email').isEmail(),
@@ -26,9 +26,9 @@ router.post('/createuser', [
       return res.status(400).json({error: "sorry, email is registered already"})
     }
 
-    var salt = bcrypt.genSaltSync(10);
+    var salt = await bcrypt.genSaltSync(10);
     secPass = await bcrypt.hash(req.body.password, salt) 
-    
+
     user = await User.create({
         name: req.body.name,
         email: req.body.email,
