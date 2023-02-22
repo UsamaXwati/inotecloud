@@ -21,7 +21,7 @@ router.post('/createuser', [
     try{
 
     let user = await User.findOne({email: req.body.email});
-    console.log("nice")
+    
     if (user){
       return res.status(400).json({error: "sorry, email is registered already"})
     }
@@ -34,7 +34,15 @@ router.post('/createuser', [
         email: req.body.email,
         password: secPass,
       })
-      res.json({user})
+      const data = {
+          user: {
+            id: user.id
+        }
+      }
+
+      const authtoken = jwt.sign(data, JWT_SECRET);
+      
+      res.json({authtoken})
     }
     catch(error){
       console.log(error.message)
